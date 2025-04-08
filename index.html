@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+
+<html dir="rtl" lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة طلبات العبوات البلاستيكية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نظام إدارة طلبات العبوات البلاستيكية</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -17,271 +18,244 @@
             darkMode: 'class',
         }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-    <div class="container mx-auto px-4 py-8">
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-white text-center">نظام إدارة طلبات العبوات البلاستيكية</h1>
-        </header>
-
-        <!-- Auth Section -->
-        <div id="authSection" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-            <div id="loginForm" class="space-y-4">
-                <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">تسجيل الدخول</h2>
-                <div>
-                    <label for="email" class="block text-gray-700 dark:text-gray-300 mb-1">البريد الإلكتروني</label>
-                    <input type="email" id="email" name="email" required 
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                </div>
-                <div>
-                    <label for="password" class="block text-gray-700 dark:text-gray-300 mb-1">كلمة المرور</label>
-                    <input type="password" id="password" name="password" required 
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                </div>
-                <div class="flex space-x-2 space-x-reverse">
-                    <button id="loginBtn" class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
-                        <i class="fas fa-sign-in-alt ml-1"></i>تسجيل الدخول
+<div class="container mx-auto px-4 py-8">
+<header class="mb-8">
+<h1 class="text-3xl font-bold text-gray-800 dark:text-white text-center">نظام إدارة طلبات العبوات البلاستيكية</h1>
+</header>
+<!-- Auth Section -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8" id="authSection">
+<div class="space-y-4" id="loginForm">
+<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">تسجيل الدخول</h2>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="email">البريد الإلكتروني</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="email" name="email" required="" type="email"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="password">كلمة المرور</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="password" name="password" required="" type="password"/>
+</div>
+<div class="flex space-x-2 space-x-reverse">
+<button class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors" id="loginBtn">
+<i class="fas fa-sign-in-alt ml-1"></i>تسجيل الدخول
                     </button>
-                    <button id="registerBtn" class="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
-                        <i class="fas fa-user-plus ml-1"></i>تسجيل حساب جديد
+<button class="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors" id="registerBtn">
+<i class="fas fa-user-plus ml-1"></i>تسجيل حساب جديد
                     </button>
-                </div>
-                <div id="authMessage" class="mt-2 text-sm"></div>
-            </div>
-            <div id="userInfo" class="hidden">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">مرحباً، <span id="userName">المستخدم</span></h2>
-                        <p class="text-gray-600 dark:text-gray-400" id="userEmail">user@example.com</p>
-                        <p class="text-gray-600 dark:text-gray-400">الدور: <span id="userRole">مستخدم</span></p>
-                    </div>
-                    <button id="logoutBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm focus:outline-none">
-                        <i class="fas fa-sign-out-alt ml-1"></i>تسجيل الخروج
+</div>
+<div class="mt-2 text-sm" id="authMessage"></div>
+</div>
+<div class="hidden" id="userInfo">
+<div class="flex justify-between items-center">
+<div>
+<h2 class="text-xl font-semibold text-gray-800 dark:text-white">مرحباً، <span id="userName">المستخدم</span></h2>
+<p class="text-gray-600 dark:text-gray-400" id="userEmail">user@example.com</p>
+<p class="text-gray-600 dark:text-gray-400">الدور: <span id="userRole">مستخدم</span></p>
+</div>
+<button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm focus:outline-none" id="logoutBtn">
+<i class="fas fa-sign-out-alt ml-1"></i>تسجيل الخروج
                     </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="appContent" class="hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Order Form -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">طلب تصنيع عبوات</h2>
-                    <form id="orderForm" class="space-y-4">
-                        <div>
-                            <label for="customerName" class="block text-gray-700 dark:text-gray-300 mb-1">اسم العميل</label>
-                            <input type="text" id="customerName" name="customerName" required 
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                        </div>
-
-                        <div>
-                            <label for="size" class="block text-gray-700 dark:text-gray-300 mb-1">المقاس</label>
-                            <select id="size" name="size" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                                <option value="">اختر المقاس</option>
-                                <option value="صغير">صغير</option>
-                                <option value="متوسط">متوسط</option>
-                                <option value="كبير">كبير</option>
-                                <option value="مخصص">مخصص</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="color" class="block text-gray-700 dark:text-gray-300 mb-1">اللون</label>
-                            <select id="color" name="color" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                                <option value="">اختر اللون</option>
-                                <option value="أبيض">أبيض</option>
-                                <option value="أسود">أسود</option>
-                                <option value="أزرق">أزرق</option>
-                                <option value="أحمر">أحمر</option>
-                                <option value="أخضر">أخضر</option>
-                                <option value="شفاف">شفاف</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="printMethod" class="block text-gray-700 dark:text-gray-300 mb-1">طريقة الطباعة</label>
-                            <select id="printMethod" name="printMethod" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                                <option value="">اختر طريقة الطباعة</option>
-                                <option value="أوفست">أوفست</option>
-                                <option value="سلك سكرين">سلك سكرين</option>
-                                <option value="فلكسو">فلكسو</option>
-                                <option value="رقمية">رقمية</option>
-                                <option value="بدون طباعة">بدون طباعة</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="handle" class="block text-gray-700 dark:text-gray-300 mb-1">بيد / بدون يد</label>
-                            <select id="handle" name="handle" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                                <option value="">اختر النوع</option>
-                                <option value="بيد">بيد</option>
-                                <option value="بدون يد">بدون يد</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="quantity" class="block text-gray-700 dark:text-gray-300 mb-1">العدد المطلوب</label>
-                            <input type="number" id="quantity" name="quantity" min="1" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                        </div>
-
-                        <div>
-                            <label for="paymentTerms" class="block text-gray-700 dark:text-gray-300 mb-1">شروط الدفع</label>
-                            <textarea id="paymentTerms" name="paymentTerms" rows="2" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
-                        </div>
-
-                        <div>
-                            <label for="deliveryDate" class="block text-gray-700 dark:text-gray-300 mb-1">تاريخ التسليم</label>
-                            <input type="date" id="deliveryDate" name="deliveryDate" required
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                        </div>
-
-                        <div class="flex flex-wrap gap-3 pt-2">
-                            <button type="submit" id="submitBtn" class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
-                                <i class="fas fa-paper-plane ml-1"></i>إرسال الطلب
+</div>
+</div>
+</div>
+<div class="hidden" id="appContent">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Order Form -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">طلب تصنيع عبوات</h2>
+<form class="space-y-4" id="orderForm">
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="customerName">اسم العميل</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="customerName" name="customerName" required="" type="text"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="size">المقاس</label>
+<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="size" name="size" required="">
+<option value="">اختر المقاس</option>
+<option value="صغير">صغير</option>
+<option value="متوسط">متوسط</option>
+<option value="كبير">كبير</option>
+<option value="مخصص">مخصص</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="color">اللون</label>
+<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="color" name="color" required="">
+<option value="">اختر اللون</option>
+<option value="أبيض">أبيض</option>
+<option value="أسود">أسود</option>
+<option value="أزرق">أزرق</option>
+<option value="أحمر">أحمر</option>
+<option value="أخضر">أخضر</option>
+<option value="شفاف">شفاف</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="printMethod">طريقة الطباعة</label>
+<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="printMethod" name="printMethod" required="">
+<option value="">اختر طريقة الطباعة</option>
+<option value="أوفست">أوفست</option>
+<option value="سلك سكرين">سلك سكرين</option>
+<option value="فلكسو">فلكسو</option>
+<option value="رقمية">رقمية</option>
+<option value="بدون طباعة">بدون طباعة</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="handle">بيد / بدون يد</label>
+<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="handle" name="handle" required="">
+<option value="">اختر النوع</option>
+<option value="بيد">بيد</option>
+<option value="بدون يد">بدون يد</option>
+</select>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="quantity">العدد المطلوب</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="quantity" min="1" name="quantity" required="" type="number"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="paymentTerms">شروط الدفع</label>
+<textarea class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="paymentTerms" name="paymentTerms" required="" rows="2"></textarea>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="deliveryDate">تاريخ التسليم</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="deliveryDate" name="deliveryDate" required="" type="date"/>
+</div>
+<div class="flex flex-wrap gap-3 pt-2">
+<button class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors" id="submitBtn" type="submit">
+<i class="fas fa-paper-plane ml-1"></i>إرسال الطلب
                             </button>
-                            <button type="reset" id="resetBtn" class="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
-                                <i class="fas fa-redo-alt ml-1"></i>إعادة تعيين
+<button class="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors" id="resetBtn" type="reset">
+<i class="fas fa-redo-alt ml-1"></i>إعادة تعيين
                             </button>
-                            <button type="button" id="exportDataBtn" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition-colors">
-                                <i class="fas fa-file-export ml-1"></i>تصدير البيانات
+<button class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition-colors" id="exportDataBtn" type="button">
+<i class="fas fa-file-export ml-1"></i>تصدير البيانات
                             </button>
-                        </div>
-                    </form>
-                </div>
+</div>
+</form>
+</div>
+<!-- Orders Management Section -->
+<div class="flex flex-col space-y-6">
+<!-- Status & Notifications -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">حالة الطلبات</h2>
+<div class="space-y-3" id="notifications">
+<!-- Notifications will be displayed here -->
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 overflow-x-auto">
+<div class="flex justify-between items-center mb-4">
 
-                <!-- Orders Management Section -->
-                <div class="flex flex-col space-y-6">
-                    <!-- Status & Notifications -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">حالة الطلبات</h2>
-                        <div id="notifications" class="space-y-3">
-                            <!-- Notifications will be displayed here -->
-                        </div>
-                    </div>
-
-                    <!-- Data Table -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 overflow-x-auto">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">جدول الطلبات</h2>
-                            <div class="flex space-x-2 space-x-reverse">
-                                <button id="togglePendingBtn" class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md shadow-sm focus:outline-none text-sm">
+<button class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow-sm focus:outline-none" id="printBtn">
+<i class="fas fa-print ml-1"></i>طباعة
+        </button>
+<h2 class="text-xl font-semibold text-gray-800 dark:text-white">جدول الطلبات</h2>
+<div class="flex space-x-2 space-x-reverse">
+<button class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md shadow-sm focus:outline-none text-sm" id="togglePendingBtn">
                                     الطلبات المعلقة
                                 </button>
-                                <button id="toggleApprovedBtn" class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-sm focus:outline-none text-sm">
+<button class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-sm focus:outline-none text-sm" id="toggleApprovedBtn">
                                     الطلبات المقبولة
                                 </button>
-                                <button id="toggleRejectedBtn" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm focus:outline-none text-sm">
+<button class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm focus:outline-none text-sm" id="toggleRejectedBtn">
                                     الطلبات المرفوضة
                                 </button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">رقم الطلب</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">اسم العميل</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الكمية</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">تاريخ التسليم</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الأيام المتبقية</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الحالة</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">إجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ordersTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <!-- Orders will be displayed here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Order Details Modal -->
-        <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">تفاصيل الطلب</h3>
-                    <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
-                        <i class="fas fa-times text-xl"></i>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+<thead class="bg-gray-50 dark:bg-gray-700">
+<tr>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">رقم الطلب</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">اسم العميل</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الكمية</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">تاريخ التسليم</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الأيام المتبقية</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">الحالة</th>
+<th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">إجراءات</th>
+</tr>
+</thead>
+<tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700" id="ordersTableBody">
+<!-- Orders will be displayed here -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Details Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="orderDetailsModal">
+<div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold text-gray-800 dark:text-white">تفاصيل الطلب</h3>
+<button class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white" id="closeModalBtn">
+<i class="fas fa-times text-xl"></i>
+</button>
+</div>
+<div class="space-y-4" id="orderDetailsContent">
+<!-- Order details will be shown here -->
+</div>
+<div class="flex mt-6 gap-3" id="orderActionButtons">
+<!-- Action buttons will be added here -->
+</div>
+</div>
+</div>
+<!-- Register Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="registerModal">
+<div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold text-gray-800 dark:text-white">تسجيل حساب جديد</h3>
+<button class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white" id="closeRegisterModalBtn">
+<i class="fas fa-times text-xl"></i>
+</button>
+</div>
+<form class="space-y-4" id="registerForm">
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="registerName">الاسم</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="registerName" name="registerName" required="" type="text"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="registerEmail">البريد الإلكتروني</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="registerEmail" name="registerEmail" required="" type="email"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="registerPassword">كلمة المرور</label>
+<input class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="registerPassword" minlength="6" name="registerPassword" required="" type="password"/>
+</div>
+<div>
+<label class="block text-gray-700 dark:text-gray-300 mb-1" for="registerRole">الدور</label>
+<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary" id="registerRole" name="registerRole" required="">
+<option value="user">مستخدم</option>
+<option value="approver">مشرف موافقات</option>
+<option value="admin">مدير</option>
+</select>
+</div>
+<div class="text-sm" id="registerMessage"></div>
+<button class="w-full px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors" type="submit">
+<i class="fas fa-user-plus ml-1"></i>تسجيل
                     </button>
-                </div>
-                <div id="orderDetailsContent" class="space-y-4">
-                    <!-- Order details will be shown here -->
-                </div>
-                <div class="flex mt-6 gap-3" id="orderActionButtons">
-                    <!-- Action buttons will be added here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Register Modal -->
-        <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white">تسجيل حساب جديد</h3>
-                    <button id="closeRegisterModalBtn" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                <form id="registerForm" class="space-y-4">
-                    <div>
-                        <label for="registerName" class="block text-gray-700 dark:text-gray-300 mb-1">الاسم</label>
-                        <input type="text" id="registerName" name="registerName" required 
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label for="registerEmail" class="block text-gray-700 dark:text-gray-300 mb-1">البريد الإلكتروني</label>
-                        <input type="email" id="registerEmail" name="registerEmail" required 
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label for="registerPassword" class="block text-gray-700 dark:text-gray-300 mb-1">كلمة المرور</label>
-                        <input type="password" id="registerPassword" name="registerPassword" required minlength="6"
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                    </div>
-                    <div>
-                        <label for="registerRole" class="block text-gray-700 dark:text-gray-300 mb-1">الدور</label>
-                        <select id="registerRole" name="registerRole" required
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-base bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
-                            <option value="user">مستخدم</option>
-                            <option value="approver">مشرف موافقات</option>
-                            <option value="admin">مدير</option>
-                        </select>
-                    </div>
-                    <div id="registerMessage" class="text-sm"></div>
-                    <button type="submit" class="w-full px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
-                        <i class="fas fa-user-plus ml-1"></i>تسجيل
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6">
-                <div class="flex items-center">
-                    <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
-                    <span class="text-lg font-medium text-gray-700 dark:text-gray-300 mr-3">جاري المعالجة...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+</form>
+</div>
+</div>
+<!-- Loading Overlay -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="loadingOverlay">
+<div class="bg-white dark:bg-gray-800 rounded-lg p-6">
+<div class="flex items-center">
+<div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+<span class="text-lg font-medium text-gray-700 dark:text-gray-300 mr-3">جاري المعالجة...</span>
+</div>
+</div>
+</div>
+</div>
+<script>
         // Check for dark mode preference
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.classList.add('dark');
@@ -1322,6 +1296,65 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', init);
+    
+// تعريف متغير لتخزين جميع الطلبات
+let allOrders = [];
+
+// تعديل دالة fetchOrders
+async function fetchOrders() {
+    showLoading();
+    try {
+        const snapshot = await ordersCollection.orderBy('createdAt', 'desc').get();
+        allOrders = [];
+        snapshot.forEach(doc => {
+            allOrders.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        renderOrders(allOrders);
+        addNotification("تم تحميل البيانات بنجاح", "success");
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        addNotification("حدث خطأ أثناء تحميل البيانات", "error");
+    } finally {
+        hideLoading();
+    }
+}
+
+// تحديث دالة showUserInfo
+function showUserInfo() {
+    loginForm.classList.add('hidden');
+    userInfo.classList.remove('hidden');
+    appContent.classList.remove('hidden');
+    userName.textContent = currentUser.name;
+    userEmail.textContent = currentUser.email;
+    userRole.textContent = translateRole(currentUser.role);
+    fetchOrders();
+}
+
+// وظيفة طباعة الطلبات
+document.getElementById('printBtn').addEventListener('click', () => {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(\`
+        <html>
+            <head>
+                <title>طباعة الطلبات</title>
+                <style>
+                    table { width: 100%; border-collapse: collapse; direction: rtl; font-family: sans-serif; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                <h1>جدول الطلبات</h1>
+                \${document.getElementById('ordersTableBody').parentElement.outerHTML}
+            </body>
+        </html>
+    \`);
+    printWindow.document.close();
+    printWindow.print();
+});
     </script>
 </body>
 </html>
