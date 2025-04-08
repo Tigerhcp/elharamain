@@ -308,11 +308,14 @@
             appId: "1:847266877084:web:7b1881d1d8c6744bd82759",
             measurementId: "G-0108S3D9ML"
         };
-
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+                }
+        // // Initialize Firebase
+        // firebase.initializeApp(firebaseConfig);
+        // const db = firebase.firestore();
+        // const auth = firebase.auth();
 
         // Collections
         const ordersCollection = db.collection('orders');
@@ -471,99 +474,137 @@
             printBtn.addEventListener('click', printOrders);
         }
 
-        // Handle login
-        async function handleLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+       // Handle login - Updated version
+async function handleLogin() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!email || !password) {
+        setAuthMessage("يرجى إدخال البريد الإلكتروني وكلمة المرور", "error");
+        return;
+    }
+    
+    showLoading();
+    
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        if (user) {
+            // Get user data from Firestore
+            const userDoc = await usersCollection.doc(user.uid).get();
             
-            if (!email || !password) {
-                setAuthMessage("يرجى إدخال البريد الإلكتروني وكلمة المرور", "error");
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                setAuthMessage("", "");
-            } catch (error) {
-                console.error("Error signing in:", error);
-                let errorMessage = "حدث خطأ أثناء تسجيل الدخول";
+            if (userDoc.exists) {
+                currentUser = {
+                    id: user.uid,
+                    email: user.email,
+                    ...userDoc.data()
+                };
                 
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                        errorMessage = "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = "تم حظر الحساب مؤقتاً بسبب كثرة المحاولات الفاشلة. حاول مرة أخرى لاحقاً";
-                        break;
-                }
-                
-                setAuthMessage(errorMessage, "error");
-            } finally {
-                hideLoading();
+                // Update UI
+                showUserInfo();
+                fetchOrders();
+                setAuthMessage("تم تسجيل الدخول بنجاح", "success");
+            } else {
+                setAuthMessage("بيانات المستخدم غير موجودة", "error");
+                await auth.signOut();
             }
         }
+    } catch (error) {
+        console.error("Error signing in:", error);
+        let errorMessage = "حدث خطأ أثناء تسجيل الدخول";
+        
+        switch (error.code) {
+            case 'auth/user-not-found':
+            case 'auth/wrong-password':
+                errorMessage = "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+                break;
+            case 'auth/too-many-requests':
+                errorMessage = "تم حظر الحساب مؤقتاً بسبب كثرة المحاولات الفاشلة";
+                break;
+            case 'auth/invalid-email':
+                errorMessage = "بريد إلكتروني غير صالح";
+                break;
+            default:
+                errorMessage = "حدث خطأ غير متوقع أثناء تسجيل الدخول";
+        }
+        
+        setAuthMessage(errorMessage, "error");
+    } finally {
+        hideLoading();
+    }
+}
 
-        // Handle register
-        async function handleRegister(e) {
-            e.preventDefault();
+// Handle register - Updated version
+async function handleRegister(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const role = document.getElementById('registerRole').value;
+    
+    // Validate inputs
+    if (!name || !email || !password) {
+        setRegisterMessage("يرجى تعبئة جميع الحقول", "error");
+        return;
+    }
+    
+    if (password.length < 6) {
+        setRegisterMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error");
+        return;
+    }
+    
+    showLoading();
+    
+    try {
+        // Create user with email and password
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        if (user) {
+            // Create user document in Firestore
+            await usersCollection.doc(user.uid).set({
+                name,
+                email,
+                role,
+                createdAt: new Date()
+            });
             
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const role = document.getElementById('registerRole').value;
+            // Close register modal and reset form
+            registerModal.classList.add('hidden');
+            registerForm.reset();
             
-            if (!name || !email || !password) {
-                setRegisterMessage("يرجى تعبئة جميع الحقول", "error");
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                // Create user with email and password
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Create user document in Firestore
-                await usersCollection.doc(user.uid).set({
-                    name,
-                    email,
-                    role,
-                    createdAt: new Date()
-                });
-                
-                // Close register modal
-                registerModal.classList.add('hidden');
-                setRegisterMessage("", "");
-                
-                // Reset form
-                registerForm.reset();
-                
-                addNotification("تم تسجيل الحساب بنجاح", "success");
-            } catch (error) {
-                console.error("Error registering:", error);
-                let errorMessage = "حدث خطأ أثناء تسجيل الحساب";
-                
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        errorMessage = "هذا البريد الإلكتروني مستخدم بالفعل";
-                        break;
-                    case 'auth/invalid-email':
-                        errorMessage = "البريد الإلكتروني غير صالح";
-                        break;
-                    case 'auth/weak-password':
-                        errorMessage = "كلمة المرور ضعيفة جداً";
-                        break;
-                }
-                
-                setRegisterMessage(errorMessage, "error");
-            } finally {
-                hideLoading();
-            }
+            // Show success message
+            setRegisterMessage("تم تسجيل الحساب بنجاح", "success");
+            addNotification("تم تسجيل الحساب بنجاح يمكنك الآن تسجيل الدخول", "success");
         }
+    } catch (error) {
+        console.error("Error registering:", error);
+        let errorMessage = "حدث خطأ أثناء تسجيل الحساب";
+        
+        switch (error.code) {
+            case 'auth/email-already-in-use':
+                errorMessage = "هذا البريد الإلكتروني مستخدم بالفعل";
+                break;
+            case 'auth/invalid-email':
+                errorMessage = "البريد الإلكتروني غير صالح";
+                break;
+            case 'auth/weak-password':
+                errorMessage = "كلمة المرور ضعيفة جداً (يجب أن تكون 6 أحرف على الأقل)";
+                break;
+            case 'auth/operation-not-allowed':
+                errorMessage = "عملية التسجيل غير مسموح بها";
+                break;
+            default:
+                errorMessage = "حدث خطأ غير متوقع أثناء التسجيل";
+        }
+        
+        setRegisterMessage(errorMessage, "error");
+    } finally {
+        hideLoading();
+    }
+}
 
         // Handle logout
         async function handleLogout() {
